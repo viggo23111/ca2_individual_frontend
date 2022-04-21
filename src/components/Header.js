@@ -13,8 +13,14 @@ const Header = ({logout}) => {
                             <LinkContainer to="/">
                                 <Nav.Link>Home</Nav.Link>
                             </LinkContainer>
-                            <LinkContainer to="/jokes">
-                                <Nav.Link>Jokes</Nav.Link>
+                            <LinkContainer to="/myip">
+                                <Nav.Link>My IP</Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/ipinfo">
+                                <Nav.Link>IPinfo</Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/searchcounter">
+                                <Nav.Link>Search counter</Nav.Link>
                             </LinkContainer>
                             <Button className="float-end" onClick={logout}>Log out</Button>
                         </Nav>

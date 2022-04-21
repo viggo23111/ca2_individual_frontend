@@ -1,11 +1,13 @@
 import React from 'react';import {useEffect, useState} from "react";
 import {Button, Container, Form} from "react-bootstrap";
+import { getCounterUrl } from "../Settings";
 
 const SearchCounter = () => {
     const [counter,setCounter] =useState('');
+    const url=getCounterUrl();
 
     const getCounter = () =>{
-        fetch("http://localhost:8080/ca2_war_exploded/api/ip/count",{
+        fetch(url,{
             method: 'GET', // or 'PUT'
         })
             .then(res => res.json())
@@ -14,7 +16,10 @@ const SearchCounter = () => {
                 console.log(error.status)
             })
     }
-    getCounter()
+    useEffect(() => {
+        getCounter()
+    },[])
+
 
 
 

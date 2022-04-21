@@ -1,4 +1,4 @@
-const URL = "http://localhost:8080/ca2_war_exploded";
+const URL = "https://vikhub.dk/tomcat/ca2";
 
 function handleHttpErrors(res) {
     if (!res.ok) {

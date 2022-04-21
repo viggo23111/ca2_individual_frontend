@@ -1,11 +1,13 @@
 import React from 'react';import {useEffect, useState} from "react";
 import {Button, Container, Form} from "react-bootstrap";
+import {getMyIPUrl} from "../Settings";
 
 const MyIP = () => {
     const [IP,setIP] = useState();
+    const url=getMyIPUrl();
 
     const getIP = () =>{
-        fetch("https://api.ipify.org/?format=json",{
+        fetch(url,{
             method: 'GET', // or 'PUT'
         })
             .then(res => res.json())
@@ -14,12 +16,12 @@ const MyIP = () => {
                 console.log("error")
             })
     }
-    getIP()
-
+    useEffect(() => {
+        getIP()
+    },[])
 
 
     return(
-
 
         <Container className={"mt-5"}>
             {

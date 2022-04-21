@@ -1,37 +1,53 @@
-import React from 'react';import {useEffect, useState} from "react";
+import React from 'react';
+import {useEffect, useState} from "react";
 import {Button, Container, Form} from "react-bootstrap";
 import apiFacade from "../apiFacade";
+import {getIPInfoUrl} from "../Settings";
 
 const IPInfo = () => {
-    const initialState = {ip: "", city: "", region: "",country:"" ,loc:"" ,postal:"" ,timezone:""};
-    const [IPInfo,setIPInfo] =useState(initialState);
-    const [IP,setIP] =useState('');
-    const [Error,setError] =useState('');
+    const initialState = {city: "", region: "", country: "", loc: "", postal: "", timezone: ""};
+    const [IPInfo, setIPInfo] = useState(initialState);
+    const [IP, setIP] = useState('');
+    const [ErrorMSG, setErrorMSG] = useState('');
+    const url = getIPInfoUrl()
 
-    const getIPInfo = () =>{
-        const options = apiFacade.makeOptions('GET',true)
-        fetch(`http://localhost:8080/ca2_war_exploded/api/ip/`+IP,options)
-            .then(res => res.json())
-            .then(IPInfo => setIPInfo(IPInfo))
-            .catch((error) =>{
-                console.log(error.status)
+    const getIPInfo = () => {
+        const options = apiFacade.makeOptions('GET', true)
+        fetch(url + IP, options)
+            .then(function (response) {
+                if (response.status === 401) {
+                    setErrorMSG("You are not allowed to use this feature!")
+                } else {
+                    fetch(url + IP, options)
+                        .then(res => res.json())
+                        .then(IPInfo => setIPInfo(IPInfo))
+                }
             })
+            .catch(function (err) {
+            });
     }
 
 
-    return(
+    return (
         <Container className={"mt-5"}>
             <h1 className={"text-center"}>Search for an IP</h1>
             <div className={"w-50 m-auto"}>
-            <div className="input-group">
-                <input className={"w-100"} name="ip" placeholder="Search an IP " value={IP} onChange={(e) => setIP(e.target.value)}/>
-            </div>
-            <Button className={"w-100"}  variant="primary" type="submit" onClick={getIPInfo}>
-                Get IP info
-            </Button>
+                <div className="input-group">
+                    <input className={"w-100"} name="ip" placeholder="Search an IP " value={IP}
+                           onChange={(e) => setIP(e.target.value)}/>
+                </div>
+                <Button className={"w-100"} variant="primary" type="submit" onClick={getIPInfo}>
+                    Get IP info
+                </Button>
             </div>
             {
-                IPInfo.ip &&
+                ErrorMSG &&
+                <div className="alert alert-danger mt-3" role="alert">
+                    {ErrorMSG}
+                </div>
+            }
+            {
+                IPInfo.city &&
                 <div>
                     <div className="details text-center">
                         <div className="body-text opacity-50">IP address details</div>
@@ -76,7 +92,8 @@ const IPInfo = () => {
                             </tr>
                             <tr>
                                 <td>
-                                    <a href={`https://www.google.com/maps/search/`+IPInfo.loc}>Search on map
+                                    <a href={`https://www.google.com/maps/search/` + IPInfo.loc} target="_blank">Search
+                                        on map
                                     </a>
                                 </td>
                             </tr>
